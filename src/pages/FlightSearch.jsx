@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, VStack, Heading, FormControl, FormLabel, Input, Button, Select, Box } from "@chakra-ui/react";
+import { Container, VStack, Heading, FormControl, FormLabel, Input, Button, Select, Box, Alert, AlertIcon } from "@chakra-ui/react";
 
 const FlightSearch = () => {
   const [departureCity, setDepartureCity] = useState("");
@@ -8,6 +8,7 @@ const FlightSearch = () => {
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
   const [searchResults, setSearchResults] = useState([]);
+  const [bookingConfirmation, setBookingConfirmation] = useState(null);
 
   const handleSearch = () => {
     // Mock search results
@@ -16,6 +17,16 @@ const FlightSearch = () => {
       { id: 2, airline: "Airline B", price: "$250", duration: "4h 15m" },
     ];
     setSearchResults(results);
+  };
+
+  const handleBook = (result) => {
+    // Mock booking confirmation
+    const confirmation = {
+      type: "Flight",
+      details: `Airline: ${result.airline}, Price: ${result.price}, Duration: ${result.duration}`,
+      confirmationNumber: Math.floor(Math.random() * 1000000),
+    };
+    setBookingConfirmation(confirmation);
   };
 
   return (
@@ -58,9 +69,21 @@ const FlightSearch = () => {
               <p>Airline: {result.airline}</p>
               <p>Price: {result.price}</p>
               <p>Duration: {result.duration}</p>
+              <Button colorScheme="teal" onClick={() => handleBook(result)}>Book</Button>
             </Box>
           ))}
         </Box>
+      )}
+      {bookingConfirmation && (
+        <Alert status="success" mt={8}>
+          <AlertIcon />
+          <Box>
+            <Heading as="h4" size="md">Booking Confirmation</Heading>
+            <p>Type: {bookingConfirmation.type}</p>
+            <p>Details: {bookingConfirmation.details}</p>
+            <p>Confirmation Number: {bookingConfirmation.confirmationNumber}</p>
+          </Box>
+        </Alert>
       )}
     </Container>
   );
